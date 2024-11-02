@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
+	proto_tg_service "github.com/0sokrat0/telegram-grpc-service/gen/go/proto"
 	"google.golang.org/grpc"
-	proto_tg_service "telegram-grpc-service/gen/go/proto"
 )
 
 func main() {
@@ -26,17 +26,18 @@ func main() {
 	// Список Telegram User IDs для отправки сообщения
 	userIDs := []int64{575225733} // Замените на реальные User IDs
 
-	// Отправляем текстовое сообщение
+	// Отправляем сообщение с фото и форматированной подписью
 	resp, err := client.SendMessage(ctx, &proto_tg_service.SendMessageRequest{
 		UserIds: userIDs,
-		Content: &proto_tg_service.SendMessageRequest_TextContent{
-			TextContent: &proto_tg_service.TextContent{
-				Text:                  "Привет от бота!",
-				ParseMode:             "MarkdownV2",
-				DisableWebPagePreview: true,
+		Content: &proto_tg_service.SendMessageRequest_PhotoContent{
+			PhotoContent: &proto_tg_service.PhotoContent{
+				Url:       "https://miro.medium.com/v2/resize:fit:1000/0*YISbBYJg5hkJGcQd.png", // Замените на реальный URL изображения
+				Caption:   "Привет от бота! <b>Это жирный текст</b>, <i>это курсив</i>. <a href=\"https://example.com\">Ссылка</a>",
+				ParseMode: "HTML",
 			},
 		},
 	})
+
 	if err != nil {
 		log.Fatalf("Ошибка при вызове SendMessage: %v", err)
 	}

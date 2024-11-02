@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
+	proto_tg_service "github.com/0sokrat0/telegram-grpc-service/gen/go/proto"
 	"github.com/nats-io/nats.go"
 	"google.golang.org/protobuf/proto"
-	proto_tg_service "telegram-grpc-service/gen/go/proto"
 )
 
 // MessagingService реализует интерфейс вашего gRPC сервиса

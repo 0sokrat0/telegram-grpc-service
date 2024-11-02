@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"telegram-grpc-service/pkg/worker"
+	"github.com/0sokrat0/telegram-grpc-service/pkg/worker"
 )
 
 func main() {

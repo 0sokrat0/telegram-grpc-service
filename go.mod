@@ -1,12 +1,13 @@
-module telegram-grpc-service
+module github.com/0sokrat0/telegram-grpc-service
 
-go 1.23.2
+go 1.22
 
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.23.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/joho/godotenv v1.5.1
 	github.com/nats-io/nats.go v1.37.0
+	google.golang.org/genproto/googleapis/api v0.0.0-20241021214115-324edc3d5d38
 	google.golang.org/grpc v1.67.1
 	google.golang.org/protobuf v1.35.1
 )

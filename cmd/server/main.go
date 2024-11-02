@@ -4,9 +4,9 @@ import (
 	"log"
 	"net"
 
+	proto_tg_service "github.com/0sokrat0/telegram-grpc-service/gen/go/proto"
+	"github.com/0sokrat0/telegram-grpc-service/pkg/api"
 	"google.golang.org/grpc"
-	proto_tg_service "telegram-grpc-service/gen/go/proto"
-	"telegram-grpc-service/pkg/api"
 )
 
 func main() {

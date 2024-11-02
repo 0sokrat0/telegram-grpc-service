@@ -2,12 +2,18 @@ syntax = "proto3";
 
 package grpcserver;
 
+import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-option go_package = "github.com/0sokrat0/telegram-grpc-service/proto;proto_tg_service";
+option go_package = "github.com/0sokrat0/telegram-grpc-service/gen/go/proto;proto_tg_service";
+
 
 service MessagingService {
-  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {
+  rpc SendMessage (SendMessageRequest) returns (SendMessageResponse) {
+    option (google.api.http) = {
+      post: "/v1/messages/send"
+      body: "*"
+    };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Отправляет сообщение пользователю";
       description: "Этот метод отправляет сообщение в Telegram пользователя с заданным user_id.";
@@ -33,6 +39,7 @@ message TextContent {
 message PhotoContent {
   string url = 1;
   string caption = 2;
+  string parse_mode = 3; // Добавлено поле parse_mode
 }
 
 message SendMessageResponse {

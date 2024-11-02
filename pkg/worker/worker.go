@@ -2,14 +2,14 @@ package worker
 
 import (
 	"fmt"
+	"github.com/0sokrat0/telegram-grpc-service/config"
+	"github.com/0sokrat0/telegram-grpc-service/pkg/telegram"
 	"sync"
-	"telegram-grpc-service/config"
-	"telegram-grpc-service/pkg/telegram"
 	"time"
 
+	proto_tg_service "github.com/0sokrat0/telegram-grpc-service/gen/go/proto"
 	"github.com/nats-io/nats.go"
 	"google.golang.org/protobuf/proto"
-	proto_tg_service "telegram-grpc-service/gen/go/proto"
 )
 
 // StartWorker запускает воркер для обработки сообщений
