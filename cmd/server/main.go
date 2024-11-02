@@ -1,19 +1,35 @@
 package main
 
 import (
-	"fmt"
-	"telegram-grpc-service/config" // замените `myproject` на фактическое имя вашего модуля
+	"log"
+	"net"
+
+	"google.golang.org/grpc"
+	proto_tg_service "telegram-grpc-service/gen/go/proto"
+	"telegram-grpc-service/pkg/api"
 )
 
 func main() {
-	cfg := config.GetConfig()
+	// Создаем новый сервис
+	messagingService, err := api.NewMessagingService()
+	if err != nil {
+		log.Fatalf("Ошибка при создании сервиса: %v", err)
+	}
+	defer messagingService.Close()
 
-	// Используйте токен бота
-	fmt.Printf("Telegram Bot Token: %s\n", cfg.BotToken)
+	// Создаем gRPC сервер
+	grpcServer := grpc.NewServer()
 
-	// Используйте параметры для gRPC
-	grpcAddress := fmt.Sprintf("%s:%d", cfg.GrpcHost, cfg.GrpcPort)
-	fmt.Printf("gRPC Server Address: %s\n", grpcAddress)
+	// Регистрируем сервис
+	proto_tg_service.RegisterMessagingServiceServer(grpcServer, messagingService)
 
-	// Здесь можно продолжить настройку gRPC-сервера с использованием cfg.GrpcHost и cfg.GrpcPort
+	// Запускаем сервер на порту 50051
+	listener, err := net.Listen("tcp", ":50051")
+	if err != nil {
+		log.Fatalf("Не удалось запустить слушатель: %v", err)
+	}
+	log.Println("gRPC сервер запущен на порту 50051")
+	if err := grpcServer.Serve(listener); err != nil {
+		log.Fatalf("Ошибка при запуске сервера: %v", err)
+	}
 }
