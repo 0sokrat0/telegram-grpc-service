@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package grpcserver;
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/0sokrat0/telegram-grpc-service/proto;proto_tg_service";
+
+service MessagingService {
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Отправляет сообщение пользователю";
+      description: "Этот метод отправляет сообщение в Telegram пользователя с заданным user_id.";
+    };
+  }
+}
+
+message SendMessageRequest {
+  repeated int64 user_ids = 1;
+
+  oneof content {
+    TextContent text_content = 2;
+    PhotoContent photo_content = 3;
+  }
+}
+
+message TextContent {
+  string text = 1;
+  string parse_mode = 2;
+  bool disable_web_page_preview = 3;
+}
+
+message PhotoContent {
+  string url = 1;
+  string caption = 2;
+}
+
+message SendMessageResponse {
+  bool success = 1;
+  int32 success_count = 2; // Количество успешно отправленных сообщений
+  int32 failure_count = 3; // Количество неудачных отправок
+  repeated int64 failed_user_ids = 4; // Список идентификаторов пользователей, которым не удалось отправить сообщение
+  string error_message = 5;
+}

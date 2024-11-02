@@ -11,6 +11,8 @@ type Config struct {
 	BotToken string `env:"BOT_TOKEN" env-required:"true"`
 	GrpcHost string `env:"GRPC_HOST" env-default:"localhost"`
 	GrpcPort int    `env:"GRPC_PORT" env-default:"50051"`
+	NATSHost string `env:"NATS_HOST" env-default:"localhost"`
+	NATSPort int    `env:"NATS_PORT" env-default:"50052"`
 }
 
 var instance *Config
