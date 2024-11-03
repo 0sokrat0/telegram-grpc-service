@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
-	proto_tg_service "github.com/0sokrat0/telegram-grpc-service/gen/go/proto"
-	"google.golang.org/grpc"
 	"log"
 	"time"
+
+	proto "github.com/0sokrat0/telegram-grpc-service/gen/go/proto"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -16,23 +17,20 @@ func main() {
 	}
 	defer conn.Close()
 
-	client := proto_tg_service.NewMessagingServiceClient(conn)
+	client := proto.NewMessagingServiceClient(conn)
 
 	// Создаем контекст с таймаутом
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	// Список Telegram User IDs для отправки сообщения
-	userIDs := []int64{575225733} // Замените на реальные User IDs
-
-	// Отправляем сообщение с фото и форматированной подписью
-	resp, err := client.SendMessage(ctx, &proto_tg_service.SendMessageRequest{
-		UserIds: userIDs,
-		Content: &proto_tg_service.SendMessageRequest_PhotoContent{
-			PhotoContent: &proto_tg_service.PhotoContent{
-				Url:       "https://miro.medium.com/v2/resize:fit:1000/0*YISbBYJg5hkJGcQd.png", // Замените на реальный URL изображения
-				Caption:   "Привет от бота! <b>Это жирный текст</b>, <i>это курсив</i>. <a href=\"https://example.com\">Ссылка</a>",
-				ParseMode: "HTML",
+	// Пример: запрос на отправку текстового сообщения всем пользователям
+	resp, err := client.SendMessage(ctx, &proto.SendMessageRequest{
+		All: true,
+		Content: &proto.SendMessageRequest_TextContent{
+			TextContent: &proto.TextContent{
+				Text:                  "Привет от бота! Это тестовое сообщение.",
+				ParseMode:             "HTML",
+				DisableWebPagePreview: true,
 			},
 		},
 	})

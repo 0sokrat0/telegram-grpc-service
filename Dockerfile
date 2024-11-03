@@ -25,3 +25,6 @@ COPY --from=builder /app/main .
 
 # Command to run the binary
 CMD ["./main"]
+
+# В конце Dockerfile добавьте
+RUN apk add --no-cache curl

@@ -7,7 +7,6 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/0sokrat0/telegram-grpc-service/gen/go/proto;proto_tg_service";
 
-
 service MessagingService {
   rpc SendMessage (SendMessageRequest) returns (SendMessageResponse) {
     option (google.api.http) = {
@@ -16,19 +15,22 @@ service MessagingService {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Отправляет сообщение пользователю";
-      description: "Этот метод отправляет сообщение в Telegram пользователя с заданным user_id.";
+      description: "Этот метод отправляет сообщение в Telegram пользователя с заданным user_id или всем пользователям, если all=true.";
     };
   }
 }
 
 message SendMessageRequest {
-  repeated int64 user_ids = 1;
+  bool all = 1;  // Если true, сообщение будет отправлено всем пользователям
+  repeated int64 user_ids = 2;  // Идентификаторы пользователей, если all=false
 
   oneof content {
-    TextContent text_content = 2;
-    PhotoContent photo_content = 3;
+    TextContent text_content = 3;
+    PhotoContent photo_content = 4;
   }
 }
+
+
 
 message TextContent {
   string text = 1;
@@ -39,13 +41,13 @@ message TextContent {
 message PhotoContent {
   string url = 1;
   string caption = 2;
-  string parse_mode = 3; // Добавлено поле parse_mode
+  string parse_mode = 3;
 }
 
 message SendMessageResponse {
-  bool success = 1;
+  bool success = 1; // Статус успешности выполнения запроса
   int32 success_count = 2; // Количество успешно отправленных сообщений
   int32 failure_count = 3; // Количество неудачных отправок
-  repeated int64 failed_user_ids = 4; // Список идентификаторов пользователей, которым не удалось отправить сообщение
-  string error_message = 5;
+  repeated int64 failed_user_ids = 4; // Идентификаторы пользователей, которым не удалось отправить сообщение
+  string error_message = 5; // Сообщение об ошибке, если есть
 }
