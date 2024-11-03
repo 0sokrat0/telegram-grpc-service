@@ -1,4 +1,4 @@
-package main
+package gateway
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func run() error {
+func MainGateway() {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -26,15 +26,11 @@ func run() error {
 
 	err := proto_tg_service.RegisterMessagingServiceHandlerFromEndpoint(ctx, mux, grpcServerEndpoint, opts)
 	if err != nil {
-		return err
+		log.Fatalf("Ошибка при регистрации сервиса: %v", err)
 	}
 
 	log.Println("Запуск HTTP сервера на порту 8080")
-	return http.ListenAndServe(":8080", mux)
-}
-
-func main() {
-	if err := run(); err != nil {
+	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatalf("Ошибка при запуске HTTP сервера: %v", err)
 	}
 }

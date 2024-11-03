@@ -2,11 +2,10 @@ package main
 
 import (
 	"context"
-	"log"
-	"time"
-
 	proto_tg_service "github.com/0sokrat0/telegram-grpc-service/gen/go/proto"
 	"google.golang.org/grpc"
+	"log"
+	"time"
 )
 
 func main() {
@@ -41,6 +40,5 @@ func main() {
 	if err != nil {
 		log.Fatalf("Ошибка при вызове SendMessage: %v", err)
 	}
-
 	log.Printf("Ответ от сервера: %v", resp)
 }

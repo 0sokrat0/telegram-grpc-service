@@ -1,15 +1,15 @@
-package main
+package server
 
 import (
+	"github.com/0sokrat0/telegram-grpc-service/internal/api"
 	"log"
 	"net"
 
 	proto_tg_service "github.com/0sokrat0/telegram-grpc-service/gen/go/proto"
-	"github.com/0sokrat0/telegram-grpc-service/pkg/api"
 	"google.golang.org/grpc"
 )
 
-func main() {
+func MainServer() {
 	// Создаем новый сервис
 	messagingService, err := api.NewMessagingService()
 	if err != nil {

@@ -22,7 +22,7 @@ var once sync.Once
 func GetConfig() *Config {
 	once.Do(func() {
 		// Загрузка из файла .env, если он существует
-		if err := godotenv.Load(".env"); err != nil {
+		if err := godotenv.Load("config/.env"); err != nil {
 			log.Println("Файл .env не найден, загрузка из переменных окружения")
 		}
 

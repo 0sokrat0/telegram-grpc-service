@@ -1,30 +1,27 @@
-# build/gateway/Dockerfile
+# Stage 1: Build the Go binary
+FROM golang:1.22 AS builder
 
-# Stage 1: Сборка Go-бинарника
-FROM golang:1.19-alpine AS builder
-
+# Set the Current Working Directory inside the container
 WORKDIR /app
 
-# Копируем файлы модулей и загружаем зависимости
+# Copy go.mod and go.sum first, to leverage Docker cache
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Копируем исходный код
+# Copy the source code into the container
 COPY . .
 
-# Сборка gateway
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o gateway ./cmd/gateway
+# Build the Go app
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd/main
 
-# Stage 2: Создание минимального образа
+# Stage 2: Create a minimal image
 FROM alpine:latest
 
+# Set the Current Working Directory inside the container
 WORKDIR /app
 
-# Копируем бинарник из предыдущего этапа
-COPY --from=builder /app/gateway .
+# Copy the pre-built binary file from the previous stage
+COPY --from=builder /app/main .
 
-# Открываем порт для HTTP сервера
-EXPOSE 8080
-
-# Запуск gateway
-CMD ["./gateway", "--grpc-server-endpoint=grpc_server:50051"]
+# Command to run the binary
+CMD ["./main"]

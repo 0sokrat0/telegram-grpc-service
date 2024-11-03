@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  nats-server:
+    image: nats:latest
+    ports:
+      - "4222:4222"  # Порт для клиента
+      - "8222:8222"  # Порт для мониторинга
+    command: ["-js"]  # Включение JetStream
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"  # Порт для HTTP сервера
+      - "50051:50051"  # Порт для gRPC сервера
+    depends_on:
+      - nats-server  # Зависимость от NATS

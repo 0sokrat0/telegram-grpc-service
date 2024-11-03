@@ -1,8 +1,0 @@
-version: v1
-build:
-  roots:
-    - proto
-    - third_party
-lint:
-  use:
-    - DEFAULT
